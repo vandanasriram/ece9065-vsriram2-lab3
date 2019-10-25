@@ -1,0 +1,12 @@
+body 
+{
+background-image: url("images/new.jpg");
+padding-left: 1em;
+padding-right: 1em;
+font-family:
+Georgia, "Times New Roman",
+Times, serif; 
+color: rgb(247, 244, 244);     
+border-style: solid;
+  border-color: red green blue yellow;   
+}
