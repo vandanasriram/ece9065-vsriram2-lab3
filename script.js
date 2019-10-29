@@ -43,7 +43,7 @@ var items = [
         category: "cd"
     }
 ];
-var itemsAvailable = [
+var itemsAvailable /*= [
     {
         item_name: "Harry Potter and the Socerer's Stone",
         category: "book",
@@ -106,8 +106,8 @@ var itemsAvailable = [
         imgUrl: "images/cd4.jpg",
         item_name2:"Zootopia français"
     }
-]
-var dueDatesObj = { book: 30, cd: 10 }
+]*/
+var dueDatesObj;
 var checkoutItem = [];
 var adminLogoutFlag = false;
 var node;
@@ -122,11 +122,25 @@ var button;
 var imgtag;
 var secLangflag;
 
-
+loadDueDates();
 loadAvailableItems();
 
-function loadAvailableItems(secLang) {
+async function loadDueDates() {
+    let promise = new Promise(resolve => {
+        getdueDate(resolve);
+      });
+      dueDatesObj = await promise;
+      dueDatesObj= dueDatesObj[0];
+      console.log(dueDatesObj);
+}
+
+async function loadAvailableItems(secLang) {
     secLangflag = secLang || false;
+        let promise = new Promise(resolve => {
+            getAvailableItems(resolve);
+          });
+          itemsAvailable = await promise;
+    
     totalItemsAvail = itemsAvailable.length;
     for (var i = 0; i < totalItemsAvail; i++) {
         node = document.createElement("li");
@@ -136,6 +150,7 @@ function loadAvailableItems(secLang) {
         secLangflag ? innerText = document.createTextNode(itemsAvailable[i].item_name2) :innerText = document.createTextNode(itemsAvailable[i].item_name);
         itemName.appendChild(innerText);
         dueDate = document.createElement("p");
+        console.log(JSON.stringify(dueDatesObj));
         itemsAvailable[i].category === "book" ? date.setDate(date.getDate() + dueDatesObj.book) : date.setDate(date.getDate() + dueDatesObj.cd);
         innerText = document.createTextNode("Due Date: " + date.getDate().toString() + "-" + (date.getMonth() + 1).toString() + "-" + date.getFullYear().toString());
         dueDate.appendChild(innerText);
@@ -307,7 +322,7 @@ function uservalidation() {
                 alert("enter valid details");
                 errFLag = true;
             }
-        }
+        }   
     
         if (errFLag === true) {
             document.getElementById("library-items-details").classList.add("display-none");
@@ -317,7 +332,7 @@ function uservalidation() {
 
 }
 
-function addItem() {
+async function addItem() {
     if (!document.getElementById("library-checkout-details").classList.contains("display-none")) {
         document.getElementById("library-checkout-details").classList.add("display-none");
     }
@@ -335,10 +350,25 @@ function addItem() {
     itemsAvailable.push(itemObj);
     alert("item Added successfully" + "\n" + "See the updated list below");
     deleteAvailNodes("#available-items");
-    loadAvailableItems(secLangflag);
+    
+
+   
+    var headers = {
+        "content-type" : "application/json"
+    }
+    await fetch('http://localhost:8081/libraryitem', { method: 'POST', headers: headers, body: JSON.stringify(itemObj)})
+                .then((res) => {debugger
+                    return res.json()
+                })
+                .catch((json) => {debugger
+                    console.log(json);
+                });
+     loadAvailableItems(secLangflag);
+
 
 }
-function removeItem() {
+
+async function removeItem() {
     if (!document.getElementById("library-checkout-details").classList.contains("display-none")) {
         document.getElementById("library-checkout-details").classList.add("display-none");
     }
@@ -347,6 +377,7 @@ function removeItem() {
     }
     var addItemName = document.getElementById("item-name").value;
     var addItemCategory = document.getElementById("category").value;
+
     var itemLen = itemsAvailable.length;
     var removeFlag = false;
     for (var i = 0; i < itemLen; i++) {
@@ -360,11 +391,21 @@ function removeItem() {
         alert("Item not found");
     }
     else {
+        
         alert("removed successfully" + "\n" + "See the updated list below");
         deleteAvailNodes("#available-items");
+                }
+                
+                
+                await fetch('http://localhost:8081/nolibraryitem/' + addItemName, { method: 'DELETE'})
+                            .then((res) => {debugger
+                                return res.json()
+                            })
+                            .catch((json) => {debugger
+                                console.log(json);
+                            });
         loadAvailableItems(secLangflag);
     }
-}
 
 function updateDueDate() {
     if (!document.getElementById("library-checkout-details").classList.contains("display-none")) {
@@ -380,7 +421,24 @@ function updateDueDate() {
 
     if (name === "admin" && Number(year) === 1867) {
         dueDatesObj[dueItemCategory] = Number(newDueday);
+        //fetch for updating the due date
+        var headers = {
+            "content-type" : "application/json"
+        };
+        var req = {
+            "dueItemCategory" : dueItemCategory,
+            "dueDate" : Number(newDueday)
+        }
+         fetch('http://localhost:8081/update_duedate', { method: 'PUT', headers: headers, body: JSON.stringify(req)})
+                    .then((res) => {debugger
+                        return res.json()
+                    })
+                    .catch((json) => {debugger
+                        console.log(json);
+                    });
+///////////////////////////////////////////////////////////////////////////////
     }
+    
     document.getElementById("bookdue").innerText = dueDatesObj.book;
     document.getElementById("cddue").innerText = dueDatesObj.cd;
     alert("Due date updated successfully" + "\n" + "See the updated list below");
@@ -428,4 +486,28 @@ function onlyLetter(input){
   //  code
 
     });
+}
+function getAvailableItems(resolve) {
+    fetch('http://localhost:8081/available-items')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      itemsAvailable = data.result;
+      resolve(itemsAvailable);
+    })
+    .catch(err => {
+        resolve("Error in displaying available items. Try Again!");
+    })
+}
+function getdueDate(resolve) {
+    fetch('http://localhost:8081/due-date')
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      duedate = data.result;
+      resolve(duedate);
+    })
+    .catch(err => {
+        resolve("Error in displaying available items. Try Again!");
+    })
 }
