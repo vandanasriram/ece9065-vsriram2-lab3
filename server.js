@@ -3,6 +3,8 @@ const app =express();
 const bodyParser= require('body-parser');
 const mongoose= require('mongoose');
 var cors = require('cors');
+// serve files in static' folder at root URL '/'
+app.use('/', express.static("."));
 //var fetch = require('node-fetch');
 app.use(bodyParser.urlencoded({
     extended: true
