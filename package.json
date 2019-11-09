@@ -24,3 +24,29 @@
   },
   "homepage": "https://github.com/vandanasriram/ece9065-vsriram2-lab3#readme"
 }
+{
+  "name": "library_complete",
+  "version": "1.0.0",
+  "description": "Lab 3-REST API",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "*",
+    "body-parser": "*",
+    "mongoose": "*",
+    "cors": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vandanasriram/ece9065-vsriram2-lab3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vandanasriram/ece9065-vsriram2-lab3/issues"
+  },
+  "homepage": "https://github.com/vandanasriram/ece9065-vsriram2-lab3#readme"
+}
