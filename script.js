@@ -329,7 +329,7 @@ function uservalidation() {
             document.getElementById("library-checkout-details").classList.add("display-none");
         }
     
-
+        setInterval(loadAvailableItems, 60000, true);
 }
 
 async function addItem() {
