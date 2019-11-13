@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({
   }));
   app.use(bodyParser.json());
   app.use(cors());
-  var mongoDB = 'mongodb://localhost/Library';
+  var mongoDB = 'mongodb+srv://vsriram2:Robo@2010@ece9065-vsriram2-lab3-2oykz.mongodb.net/Library?retryWrites=true&w=majority';
   mongoose.connect(mongoDB, { useNewUrlParser: true });
   var db = mongoose.connection;
   db.on('error', console.error.bind(console, 'MongoDB connection error:'));

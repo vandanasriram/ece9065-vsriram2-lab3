@@ -356,7 +356,7 @@ async function addItem() {
     var headers = {
         "content-type" : "application/json"
     }
-    await fetch('http://localhost:8081/libraryitem', { method: 'POST', headers: headers, body: JSON.stringify(itemObj)})
+    await fetch('http://3.233.165.3:8081/libraryitem', { method: 'POST', headers: headers, body: JSON.stringify(itemObj)})
                 .then((res) => {debugger
                     return res.json()
                 })
@@ -397,7 +397,7 @@ async function removeItem() {
                 }
                 
                 
-                await fetch('http://localhost:8081/nolibraryitem/' + addItemName, { method: 'DELETE'})
+                await fetch('http://3.233.165.3:8081/nolibraryitem/' + addItemName, { method: 'DELETE'})
                             .then((res) => {debugger
                                 return res.json()
                             })
@@ -429,7 +429,7 @@ function updateDueDate() {
             "dueItemCategory" : dueItemCategory,
             "dueDate" : Number(newDueday)
         }
-         fetch('http://localhost:8081/update_duedate', { method: 'PUT', headers: headers, body: JSON.stringify(req)})
+        fetch('http://3.233.165.3:8081/update_duedate', { method: 'PUT', headers: headers, body: JSON.stringify(req)})
                     .then((res) => {debugger
                         return res.json()
                     })
@@ -488,7 +488,7 @@ function onlyLetter(input){
     });
 }
 function getAvailableItems(resolve) {
-    fetch('http://localhost:8081/available-items')
+    fetch('http://3.233.165.3:8081/available-items')
     .then(response => response.json())
     .then(data => {
       console.log(data);
@@ -500,7 +500,7 @@ function getAvailableItems(resolve) {
     })
 }
 function getdueDate(resolve) {
-    fetch('http://localhost:8081/due-date')
+    fetch('http://3.233.165.3:8081/due-date')
     .then(response => response.json())
     .then(data => {
       console.log(data);
