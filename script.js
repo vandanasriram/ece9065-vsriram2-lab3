@@ -269,7 +269,7 @@ function uservalidation() {
     var message;
     var currentYear = new Date().getFullYear();
     infomsg.innerText = "";
-
+/* input sanitization*/
         if (name.length > 100) {
             errFLag = true;
             alert("enter name less than 100 characters");
